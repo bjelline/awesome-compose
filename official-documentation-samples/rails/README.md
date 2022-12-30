@@ -228,12 +228,14 @@ but this folder is mapped to `./tmp/db`. This way, the database survives rebuild
 That's it. Your app should now be running on port 3000 on your Docker daemon.
 
 On Docker Desktop for Mac and Docker Desktop for Windows, go to `http://localhost:3000` on a web
-browser to see the Rails Welcome.
+browser to see the Rails Welcome.  In the Docker Desktop App you can also just click the link:
+
+![Link to Web in Docker Desktop](images/docker-desktop.png)
 
 Notice that it says "[x86_64-linux]" in the lower righthand corner?
 No matter what operating system you are using, things inside docker run on Linux.
 
-![Rails example](images/rails-welcome.png)
+![Rails Welcome Page](images/rails-welcome.png)
 
 ### Stop the application
 
