@@ -5,13 +5,17 @@ a Rails/PostgreSQL app. Before starting, [install Compose](https://docs.docker.c
 
 ## Define the project
 
+[Which Version of Ruby](https://hub.docker.com/_/ruby) and [which version of Rails](https://rubyonrails.org/) do you 
+want to use? Here we'll be using Ruby 3.2 and Rails 7.0, but there might be newer
+versions out when you read this.  Please adapt accordingly!
+
 Start by setting up the files needed to build the app. The app will run inside a
 Docker container containing its dependencies. Defining dependencies is done using
 a file called `Dockerfile`. To begin with, the  Dockerfile consists of:
 
 ```dockerfile
 # syntax=docker/dockerfile:1
-FROM ruby:2.5
+FROM ruby:3.2
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
@@ -37,7 +41,7 @@ Next, open an editor and create a bootstrap `Gemfile` which just loads Rails. Th
 
 ```ruby
 source 'https://rubygems.org'
-gem 'rails', '~>5'
+gem 'rails', '~>7.0'
 ```
 
 Create an empty `Gemfile.lock` file to build our `Dockerfile`.
@@ -75,7 +79,8 @@ services:
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: BYY8gl6y1EPR
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
   web:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
@@ -94,7 +99,10 @@ services:
 ### Build the project
 
 With those files in place, you can now generate the Rails skeleton app
-using [docker compose run](https://docs.docker.com/engine/reference/commandline/compose_run/):
+using [docker compose run](https://docs.docker.com/engine/reference/commandline/compose_run/)
+and the [options](https://guides.rubyonrails.org/command_line.html#creating-a-rails-app) for `rails new`
+you want to use.  In this example we just select postgres as the database. You might
+also chose how to handle JavaScript, for example by adding `-j esbuild`. 
 
 ```console
 $ docker compose run --no-deps web rails new . --force --database=postgresql
