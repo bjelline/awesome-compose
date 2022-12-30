@@ -214,6 +214,15 @@ Created database 'myapp_development'
 Created database 'myapp_test'
 ```
 
+To see where the data is actually stored, look up the volume
+we specified in `docker-compose.yml`: under `db` we specified:
+
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+      
+This means that postgres thinks it's writing to `/var/lib/postgresql/data` inside the container,
+but this folder is mapped to `./tmp/db`. This way, the database survives rebuilding the container.
+
 ### View the Rails welcome page!
 
 That's it. Your app should now be running on port 3000 on your Docker daemon.
