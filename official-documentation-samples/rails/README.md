@@ -191,7 +191,7 @@ You can now boot the app with [docker compose up](https://docs.docker.com/engine
 If all is well, you should see some PostgreSQL output:
 
 ```console
-$ docker compose up
+$ docker compose up -d
 
 rails_db_1 is up-to-date
 Creating rails_web_1 ... done
@@ -205,7 +205,7 @@ db_1   | 2018-03-21 20:18:37.726 UTC [55] LOG:  database system was shut down at
 db_1   | 2018-03-21 20:18:37.772 UTC [1] LOG:  database system is ready to accept connections
 ```
 
-Finally, you need to create the database. In another terminal, run:
+Finally, you need to create the database. In a terminal, run:
 
 ```console
 $ docker compose run web rake db:create
@@ -256,17 +256,25 @@ Removing network rails_default
 
 ### Restart the application
 
-To restart the application run `docker compose up` in the project directory.
+To restart the application run `docker compose up -d` in the project directory.
 
 ### Rebuild the application
 
 If you make changes to the Gemfile or the Compose file to try out some different
 configurations, you need to rebuild. Some changes require only
-`docker compose up --build`, but a full rebuild requires a re-run of
-`docker compose run web bundle install` to sync changes in the `Gemfile.lock` to
-the host, followed by `docker compose up --build`.
+`docker compose up -d --build`.
 
-Here is an example of the first case, where a full rebuild is not necessary.
+If you change the Gemfile, you need to run
+
+    docker compose run web bundle install
+    docker compose up -d --build
+    
+If you change package.json, you need to run
+
+    docker compose run web yarn install
+    docker compose up -d --build
+    
+Here is an example of the simple case, where a full rebuild is not necessary.
 Suppose you simply want to change the exposed port on the local host from `3000`
 in our first example to `3001`. Make the change to the Compose file to expose
 port `3000` on the container through a new port, `3001`, on the host, and save
